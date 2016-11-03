@@ -7,9 +7,9 @@ bool petri::Network::operator()() {
 }
 
 petri::poolIdf petri::Network::makePool(const std::string& pool_name, unsigned int nb_tokens) {
-  std::cerr << "petri::Network::makePool(\"" << pool_name
-	    << "\", " << nb_tokens << ") : to be done" << std::endl;
-  return 0;
+	pools.push_back(petri::Pool(pool_name, nb_tokens));
+	std::cout << "Added pool: " << pool_name <<std::endl;
+  return pools.size()-1;
 }
     
 petri::tranIdf petri::Network::makeTransition(const std::string& transition_name) {

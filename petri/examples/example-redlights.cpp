@@ -21,38 +21,38 @@ int main(int argc, char* argv[]) {
 
   // Then, we create the 6 transitions
 
-  petri::tranIdf turns_green_1    = redlights.makeTransition("1 turns green" );
-  petri::tranIdf turns_green_2    = redlights.makeTransition("2 turns green" );
-  petri::tranIdf turns_orange_1   = redlights.makeTransition("1 turns orange");
-  petri::tranIdf turns_orange_2   = redlights.makeTransition("2 turns orange");
-  petri::tranIdf turns_red_1      = redlights.makeTransition("1 turns red"   );
-  petri::tranIdf turns_red_2      = redlights.makeTransition("2 turns red"   );
+  // petri::tranIdf turns_green_1    = redlights.makeTransition("1 turns green" );
+  // petri::tranIdf turns_green_2    = redlights.makeTransition("2 turns green" );
+  // petri::tranIdf turns_orange_1   = redlights.makeTransition("1 turns orange");
+  // petri::tranIdf turns_orange_2   = redlights.makeTransition("2 turns orange");
+  // petri::tranIdf turns_red_1      = redlights.makeTransition("1 turns red"   );
+  // petri::tranIdf turns_red_2      = redlights.makeTransition("2 turns red"   );
 
-  // Now, we connect each transition to input and output pools.
+  // // Now, we connect each transition to input and output pools.
 
-  redlights.linkIn (turns_green_1 , red_1    , 1);
-  redlights.linkIn (turns_green_1 , all_red  , 1);
-  redlights.linkOut(turns_green_1 , green_1  , 1);
+  // redlights.linkIn (turns_green_1 , red_1    , 1);
+  // redlights.linkIn (turns_green_1 , all_red  , 1);
+  // redlights.linkOut(turns_green_1 , green_1  , 1);
 
-  redlights.linkIn (turns_orange_1, green_1  , 1);
-  redlights.linkOut(turns_orange_1, orange_1 , 1);
+  // redlights.linkIn (turns_orange_1, green_1  , 1);
+  // redlights.linkOut(turns_orange_1, orange_1 , 1);
 
-  redlights.linkIn (turns_red_1   , orange_1 , 1);
-  redlights.linkOut(turns_red_1   , red_1    , 1);
-  redlights.linkOut(turns_red_1   , all_red  , 1);
+  // redlights.linkIn (turns_red_1   , orange_1 , 1);
+  // redlights.linkOut(turns_red_1   , red_1    , 1);
+  // redlights.linkOut(turns_red_1   , all_red  , 1);
 
-  redlights.linkIn (turns_green_2 , red_2    , 1);
-  redlights.linkIn (turns_green_2 , all_red  , 1);
-  redlights.linkOut(turns_green_2 , green_2  , 1);
+  // redlights.linkIn (turns_green_2 , red_2    , 1);
+  // redlights.linkIn (turns_green_2 , all_red  , 1);
+  // redlights.linkOut(turns_green_2 , green_2  , 1);
 
-  redlights.linkIn (turns_orange_2, green_2  , 1);
-  redlights.linkOut(turns_orange_2, orange_2 , 1);
+  // redlights.linkIn (turns_orange_2, green_2  , 1);
+  // redlights.linkOut(turns_orange_2, orange_2 , 1);
 
-  redlights.linkIn (turns_red_2   , orange_2 , 1);
-  redlights.linkOut(turns_red_2   , red_2    , 1);
-  redlights.linkOut(turns_red_2   , all_red  , 1);
+  // redlights.linkIn (turns_red_2   , orange_2 , 1);
+  // redlights.linkOut(turns_red_2   , red_2    , 1);
+  // redlights.linkOut(turns_red_2   , all_red  , 1);
 
-  for(int steps = 0; steps < 100 && redlights(); ++steps);
+  // for(int steps = 0; steps < 100 && redlights(); ++steps);
 
   return 0;
 }

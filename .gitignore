@@ -46,6 +46,9 @@ cmake_install.cmake
 install_manifest.txt
 CTestTestfile.cmake
 
+# Build Folders
+*/build/*
+
 ######
 # IDEs
 ######

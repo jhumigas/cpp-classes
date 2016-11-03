@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include <vector>
+#include <petriPool.hpp>
 
 namespace petri {
 
@@ -8,7 +10,9 @@ namespace petri {
   using tranIdf = unsigned int;
   
   class Network  {
+    friend class Pool;
   private:
+    std::vector<Pool> pools;
     
   public:
     Network()                          = default;
