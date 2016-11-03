@@ -21,12 +21,12 @@ int main(int argc, char* argv[]) {
 
   // Then, we create the 6 transitions
 
-  // petri::tranIdf turns_green_1    = redlights.makeTransition("1 turns green" );
-  // petri::tranIdf turns_green_2    = redlights.makeTransition("2 turns green" );
-  // petri::tranIdf turns_orange_1   = redlights.makeTransition("1 turns orange");
-  // petri::tranIdf turns_orange_2   = redlights.makeTransition("2 turns orange");
-  // petri::tranIdf turns_red_1      = redlights.makeTransition("1 turns red"   );
-  // petri::tranIdf turns_red_2      = redlights.makeTransition("2 turns red"   );
+  petri::tranIdf turns_green_1    = redlights.makeTransition("1 turns green" );
+  petri::tranIdf turns_green_2    = redlights.makeTransition("2 turns green" );
+  petri::tranIdf turns_orange_1   = redlights.makeTransition("1 turns orange");
+  petri::tranIdf turns_orange_2   = redlights.makeTransition("2 turns orange");
+  petri::tranIdf turns_red_1      = redlights.makeTransition("1 turns red"   );
+  petri::tranIdf turns_red_2      = redlights.makeTransition("2 turns red"   );
 
   // // Now, we connect each transition to input and output pools.
 

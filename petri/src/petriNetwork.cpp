@@ -13,9 +13,9 @@ petri::poolIdf petri::Network::makePool(const std::string& pool_name, unsigned i
 }
     
 petri::tranIdf petri::Network::makeTransition(const std::string& transition_name) {
-  std::cerr << "petri::Network::makeTransition(\"" << transition_name
-	    << "\") : to be done" << std::endl;
-  return 0;
+	transitions.push_back(petri::Transition(transition_name, this));
+	std::cout << "Added transition: " << transition_name << std::endl;
+  return transitions.size()-1;
 }
 
 void petri::Network::linkIn(tranIdf      transition,

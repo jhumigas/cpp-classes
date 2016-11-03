@@ -3,16 +3,18 @@
 #include <string>
 #include <vector>
 #include <petriPool.hpp>
+#include <petriTransition.hpp>
 
 namespace petri {
 
   using poolIdf = unsigned int;
-  using tranIdf = unsigned int;
   
   class Network  {
     friend class Pool;
+    friend class Transition;
   private:
     std::vector<Pool> pools;
+    std::vector<Transition> transitions;
     
   public:
     Network()                          = default;
