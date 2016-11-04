@@ -1,7 +1,7 @@
 #pragma once
 
 namespace colormap {
-	// rgb est une classe codant chacune de ses composantes par un octet non signé (de 0 à 255)
+	// rgb est une classe codant chacune de ses composantes par un octet non signÃ© (de 0 Ã  255)
 	struct rgb {
 		// Type scalaire pour les composantes.
 		typedef unsigned char scalar_type;
@@ -9,10 +9,10 @@ namespace colormap {
 		// Composantes RGB
 		scalar_type red_, green_, blue_;
 
-		// Constructeur à partir des 3 composantes
+		// Constructeur Ã  partir des 3 composantes
 		rgb(scalar_type red, scalar_type green, scalar_type blue);
 
-		// Opérateur de comparaison (égalité)
+		// OpÃ©rateur de comparaison (Ã©galitÃ©)
 		bool operator==(const rgb& other) const; 
 
 	};
