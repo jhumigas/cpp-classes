@@ -2,8 +2,23 @@
 #include <petriNetwork.hpp>
 
 bool petri::Network::operator()() {
-  std::cerr << "petri::Network::operator()() : to be done" << std::endl;
-  return false;
+  std::cout << "Start run ... " << std::endl;
+  std::vector<unsigned int> available_transitions_idf;
+  int i = 0;
+  for(auto & value : transitions){
+    if(value){
+      available_transitions_idf.push_back(i);
+    }
+    i++;
+  }
+  if(available_transitions_idf.size() == 0){
+    return false;
+  }else{
+	int rand_index;  
+    rand_index = rand() % available_transitions_idf.size();
+    transitions[available_transitions_idf[rand_index]]();
+    return true;
+  }
 }
 
 petri::poolIdf petri::Network::makePool(const std::string& pool_name, unsigned int nb_tokens) {
@@ -21,19 +36,15 @@ petri::tranIdf petri::Network::makeTransition(const std::string& transition_name
 void petri::Network::linkIn(tranIdf      transition,
 			    poolIdf      pool,
 			    unsigned int nb_tokens_in) {
-  std::cerr << "petri::Network::linkIn (" << transition
-	    << ", " << pool
-	    << ", " << nb_tokens_in
-	    << ") : to be done" << std::endl;
+	transitions[transition].addInput(pool, nb_tokens_in);
+	std::cout << transitions[transition].name << " - Added input pool " << pool<< " with required input tokens " << nb_tokens_in << std::endl;
 }
 
 void petri::Network::linkOut(tranIdf      transition,
 			     poolIdf      pool,
 			     unsigned int nb_tokens_out) {
-  std::cerr << "petri::Network::linkOut(" << transition
-	    << ", " << pool
-	    << ", " << nb_tokens_out
-	    << ") : to be done" << std::endl;
+  transitions[transition].addOutput(pool, nb_tokens_out);
+	std::cout << transitions[transition].name << " - Added output pool " << pool << " with with required output tokens " << nb_tokens_out << std::endl;
 }
 
     

@@ -30,29 +30,29 @@ int main(int argc, char* argv[]) {
 
   // // Now, we connect each transition to input and output pools.
 
-  // redlights.linkIn (turns_green_1 , red_1    , 1);
-  // redlights.linkIn (turns_green_1 , all_red  , 1);
-  // redlights.linkOut(turns_green_1 , green_1  , 1);
+  redlights.linkIn (turns_green_1 , red_1    , 1);
+  redlights.linkIn (turns_green_1 , all_red  , 1);
+  redlights.linkOut(turns_green_1 , green_1  , 1);
 
-  // redlights.linkIn (turns_orange_1, green_1  , 1);
-  // redlights.linkOut(turns_orange_1, orange_1 , 1);
+  redlights.linkIn (turns_orange_1, green_1  , 1);
+  redlights.linkOut(turns_orange_1, orange_1 , 1);
 
-  // redlights.linkIn (turns_red_1   , orange_1 , 1);
-  // redlights.linkOut(turns_red_1   , red_1    , 1);
-  // redlights.linkOut(turns_red_1   , all_red  , 1);
+  redlights.linkIn (turns_red_1   , orange_1 , 1);
+  redlights.linkOut(turns_red_1   , red_1    , 1);
+  redlights.linkOut(turns_red_1   , all_red  , 1);
 
-  // redlights.linkIn (turns_green_2 , red_2    , 1);
-  // redlights.linkIn (turns_green_2 , all_red  , 1);
-  // redlights.linkOut(turns_green_2 , green_2  , 1);
+  redlights.linkIn (turns_green_2 , red_2    , 1);
+  redlights.linkIn (turns_green_2 , all_red  , 1);
+  redlights.linkOut(turns_green_2 , green_2  , 1);
 
-  // redlights.linkIn (turns_orange_2, green_2  , 1);
-  // redlights.linkOut(turns_orange_2, orange_2 , 1);
+  redlights.linkIn (turns_orange_2, green_2  , 1);
+  redlights.linkOut(turns_orange_2, orange_2 , 1);
 
-  // redlights.linkIn (turns_red_2   , orange_2 , 1);
-  // redlights.linkOut(turns_red_2   , red_2    , 1);
-  // redlights.linkOut(turns_red_2   , all_red  , 1);
+  redlights.linkIn (turns_red_2   , orange_2 , 1);
+  redlights.linkOut(turns_red_2   , red_2    , 1);
+  redlights.linkOut(turns_red_2   , all_red  , 1);
 
-  // for(int steps = 0; steps < 100 && redlights(); ++steps);
+  for(int steps = 0; steps < 100 && redlights(); ++steps);
 
   return 0;
 }

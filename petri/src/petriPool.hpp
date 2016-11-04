@@ -5,6 +5,7 @@
 namespace petri {
 
     class Pool {
+        friend class Transition;
 
         std::string name;
         unsigned int nbTokens;
