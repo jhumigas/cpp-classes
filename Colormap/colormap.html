@@ -1,0 +1,250 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Stage SM14, Supélec</title>
+    <link href="../../design/sm14.css" type="text/css" rel="stylesheet"/>
+    <script src="../../design/prettify/src/run_prettify.js?lang=C++"></script>
+  </head>
+  
+  <body>
+    <div id="content">
+      
+      <div id="banner">
+      </div>
+      
+      <div id="title">TP d'initiation à la STL</div>
+
+      <div id="section">Préambule</div>
+      
+	<div id="core">
+	  <p>
+	  L'objectif de ce TP est d'utiliser les structures de données et algorithmes courants de la STL sur un problème réel. En particulier
+	  il s'agira de bien comprendre les avantages et inconvénients des structures de données de la STL (vecteurs, listes chaînées, tables de hachage et arbres bicolores).
+	  </p>
+	  
+	  <p>
+	    L'objet du TP est le développement d'une table des couleurs (ou colormap).
+	  </p>
+
+	</div>
+	
+      <div id="section">Introduction</div>
+
+      <div id="core">
+
+<p>
+On veut développer une classe réalisant efficacement une <i>table de couleurs</i>. Une
+table de couleurs se définit à partir d'un ensemble de couleurs RGB. Une couleur RGB est codée par ses trois
+composantes rouge (R), verte (G) et bleue (B). Une table de couleurs permet de faire référence à
+une couleur par un indice entier égal au rang de la couleur dans la table. Cette représentation
+permet de compresser la taille d'une image lorsque le nombre de couleurs présentes dans l'image est
+limité.
+
+La modification des entrées de la table permet également de changer les teintes d'une image sans avoir à recolorier toute l'image pixel par
+pixel.
+</p>
+<p>
+Les déclarations de la structure <code>rgb</code> et de la classe <code></code>ColorMap</code> représentant
+respectivement une couleur RGB et une table de couleurs sont précisées ci dessous.
+<pre class="prettyprint">
+struct rgb {
+    typedef unsigned char scalar_type;
+    scalar_type red_, green_, blue_;
+    rgb(scalar_type red, scalar_type green, scalar_type blue); // Constructeur
+    bool operator==(const rgb& other) const; // Opérateur de comparaison
+};
+</pre>
+<pre class="prettyprint">
+class ColorMap {
+public:
+    struct MissingColor; // Classe utilisée comme exception
+
+    typedef int index_type; // Type de l'indice de couleur
+    typedef rgb color_type; // Type de codage de la couleur
+
+    ColorMap(); // Constructeur
+    void clear(); // Vide le contenu de la table
+
+    void add(const color_type& color);
+    // Ajoute une nouvelle couleur à la table.
+
+    index_type operator()(const color_type& color) const;
+    // Renvoie l'indice de la couleur RGB passée en argument.
+    // Lance une exception MissingColor
+    // si la couleur n'est pas dans la table.
+
+    const color_type& operator()(index_type index) const;
+    // Renvoie la couleur RGB d'indice index
+};
+</pre>
+Récupérez le fichier archive <a href="../Colormap.zip">Colormap.zip</a> et générez un makefile à l'aide de CMake :
+
+<pre class="prettyprint">
+unzip Colormap.zip ; cd Colormap
+mkdir build ; cd build
+cmake ..
+make  # Produit des warnings car le code doit être complété.
+./examples/testColorMap 100	# Lance le binaire compilé en passant en argument la taille de la table de couleurs.
+</pre>
+L'exécutable <code>colormap</code>  permet de
+tester le bon fonctionnement et les performances des différentes versions de tables de couleurs
+développées (en supposant que les classes associées à ces versions se conforment toutes strictement
+à l'interface <code>ColorMap</code> précisée plus haut).
+Ne disposant pas au départ de table de couleur fonctionnelle, <code>colormap</code> produit une erreur à l'exécution.
+
+L'implémentation de la classe <code>rgb</code> est fournie dans les fichiers <code>rgb.h</code> et <code>rgb.cpp</code>.
+Le fichier <code>TestColorMap.cpp</code> est le point d'entrée 
+de <code>colormap</code> et réalise les tests unitaires sur les tables de couleur.
+On se propose d'utiliser les structures de données de la STL pour
+implémenter la classe <code>ColorMap</code>.
+</p>
+      </div>
+    
+<div id="section">Utilisation des conteneurs séquentiels de la STL</div>
+
+	<div id="core">
+Une table de couleurs peut être vue comme une séquence de couleurs RGB. La STL
+propose essentiellement deux classes essentielles conformes au concept de <a href="http://en.cppreference.com/w/cpp/concept/SequenceContainer">séquence</a>.
+<ul>
+  <li>Les listes chaînées grâce au patron de classe <a href="http://en.cppreference.com/w/cpp/container/list">std::list</a>.</li>
+  <li>Les tableaux dynamiques (ou vecteurs) grâce au patron de classe <a href="http://en.cppreference.com/w/cpp/container/vector">std::vector</a>.</li>
+</ul>
+
+Chaque type de séquence de classe <code>C</code> exporte un type <code>C::iterator</code> qui permet
+d'itérer sur ses différents éléments (grâce aux opérateurs ++, * et != de <code>C::iterator</code>
+et aux méthodes <code>C::begin()</code> et <code>C::end()</code> de la classe <code>C</code>).
+
+<div id="question">
+Réalisez une table de couleurs utilisant une liste chaînée <code>std::list</code>. Utilisez pour cela la classe
+<code>ListBasedColorMap</code> dont le squelette est déjà fourni dans les fichiers <code>ListBasedColorMap.h</code> et <code>ListBasedColorMap.cpp</code>.
+Analysez le patron de test fourni dans <code>TestColorMap.cpp</code> et utilisez le pour tester <code>ListBasedColorMap</code>.
+Faites de même avec <code>std::vector</code>. Dupliquez pour cela la classe <code>ListBasedColorMap</code>
+dans les fichiers <code>VectorBasedColorMap.h</code> et <code>VectorBasedColorMap.cpp</code> puis adaptez la en une classe <code>VectorBasedColorMap</code>.
+Testez et observez les performances.
+</div>
+	</div>
+
+<div id="section">Les limites de l'unification par concept : les particularités des tableaux dynamiques</div>
+
+<div id="core">
+  <p>
+    
+On veut maintenant tirer profit de l'accès en temps constant qu'offre la structure de tableau dynamique tout
+en évitant l'inconvénient de la réallocation de mémoire lors de son remplissage.
+  </p>
+<p>
+
+<div id="question">
+Exploitez pour cela la fonction <code>reserve()</code> et l'opérateur <code>operator[]</code> de la classe
+<code>std::vector</code> (voir <a href="http://en.cppreference.com/w/cpp/container/vector">documentation en ligne</a>)
+dans la classe <code>VectorBasedColorMap</code>. Comparez les performances de la nouvelle classe avec
+celles obtenues avant optimisation. Que se passe t-il si on substitue le
+vecteur de <code>VectorBasedColorMap</code> par une liste chaînée ?
+</div>
+</p>
+
+</div>
+
+<div id="section">Utilisation des conteneurs associatifs de la STL : les arbres de recherche équilibrés</div>
+
+<div id="core">
+
+<p>
+Le vecteur est la structure de donnée la plus efficace pour accéder à une couleur RGB à partir de son indice.
+Il n'en va pas de même pour accéder à un indice de couleur à partir de sa définition RGB.
+(complexité en <code>O(n)</code>). On se propose d'utiliser un <a href="http://en.cppreference.com/w/cpp/concept/AssociativeContainer">containeur
+associatif</a> pour accéder rapidement à l'indice associé à une couleur RGB.
+</p>
+<p>
+Un conteneur associatif (aussi appelé dictionnaire) est une structure de données qui associe à des
+<i>clés</i> d'un type C donné une <i>valeur</i> de type V. Il existe principalement deux façons
+d'implémenter un conteneur associatif efficacement, soit grâce à un <i>arbre de recherche
+équilibré</i>, soit grâce à une <i>table de hachage</i> :
+<ul>
+  <li>Une <a href="http://fr.wikipedia.org/wiki/Table_de_hachage">table de hachage</a> se représente sous la forme d'un tableau dynamique de listes chaînées contenant des associations clé-valeur. Chaque clé est associée de façon déterministe à une de ces listes (appelées "godets" ou buckets en anglais) grâce à une <b>fonction de hachage</b> qui permet de calculer à partir d'une clé de type C un code entier (dit de hachage). Le godet dans lequel ranger une association est donné par le code de hachage de la clé modulo le nombre de godets. Lorsque les godets commencent en moyenne à contenir trop d'associations clé-valeur, la taille du tableau dynamique est doublée et les associations sont redistribuées entre ces godets, de sorte que la longueur moyenne des godets est réduite par deux. On peut ainsi maintenir constant le temps d'accès moyen sur un grand nombre d'accès, même si certains accès peuvent nécessiter une complexité linéaire en  <code>&Theta;(n)</code> dans le pire des cas. On parle de complexité amortie constante notée <code>&Theta;(1)</code>.</li>
+  <li>En comparaison un arbre de recherche équilibré comme les <a href="http://fr.wikipedia.org/wiki/Arbre_bicolore">arbres bicolores</a> (red-black tree) ou
+  les <a href="http://fr.wikipedia.org/wiki/Arbre_AVL">arbres AVL</a>, garantit un temps d'accès pour lire, modifier, insérer ou effacer une association en <code>&Theta;(log(n))</code> dans le pire cas (ce qui est moins bien que les tables de hachage dans le cas amorti moyen mais mieux dans le pire des cas).
+  Les arbres de recherche supposent toutefois pouvoir trier les clés (i.e. le type C) selon une relation d'ordre totale (i.e. toute paire de clés est comparable).</li>
+</ul>
+
+La STL fournit une implémentation d'un containeur associatif fondée sur les arbres bicolores à travers le patron de classe <a href="http://en.cppreference.com/w/cpp/container/map">std::map</a>.
+C'est à l'utilisateur de spécifier la relation d'ordre que l'arbre de recherche doit utiliser pour ordonner les clés.
+Le patron <code>std::map</code>  est donc paramétré non seulement par les types C et V de clés et de valeurs mais aussi par
+une fonction ou un foncteur de comparaison.
+Ce foncteur vaut par défaut la fonction <code><a href="http://en.cppreference.com/w/cpp/utility/functional/less">std::less&lt;C></a></code>
+dont l'opérateur <code>bool operator()(const C&, constC&)</code> ne fait qu'appeller l'opérateur de comparaison interne <code>bool operator<(constC&)</code> supposé défini dans la
+classe C.
+
+<div id="question">
+Définissez l'opérateur de comparaison <code>bool operator<(const rgb& other) const</code> de la classe RGB (on fera attention à bien choisir un ordre total où toute paire
+de couleurs RGB est comparable) puis
+intégrez un arbre équilibré de type <code>std::map</code> dans une copie
+<code>TreeBasedColorMap</code> de la classe <code>VectorBasedColorMap</code> afin d'accéder rapidement à
+l'indice d'une couleur RGB.
+<br>
+NB : on gardera en parallèle de l'arbre de recherche un vecteur pour retrouver rapidement une couleur RGB à
+partir de son indice.
+Observez les performances.
+</div>
+
+</div>
+
+
+<div id="section">Utilisation des conteneurs associatifs de la STL : les tables de hachage</div>
+
+<div id="core">
+
+C++11 a introduit les tables de hachage dans la STL sous la forme du patron de classe <a href="http://en.cppreference.com/w/cpp/container/unordered_map">std::unordered_map</a>.
+Son interface est conforme au concept de conteneur associatif tout comme <code>std::map</code>.
+
+De la même manière que les arbres équilibrés exigent une relation d'ordre totale sur les clés, les tables de hachage exigent une fonction de hachage sur les clés.
+Le patron <code>std::unordered_map</code> est donc paramétré non seulement par les types C et V de clés et de valeurs mais aussi par une fonction ou un foncteur de hachage.
+
+La fonction de hachage utilise par défaut le patron de foncteur <code><a href="http://en.cppreference.com/w/cpp/utility/hash">std::hash&lt;C></a></code>dont l'opérateur <code>size_t operator()(const C& c)</code> calcule le code de hachage de la clé <code>c</code>. Ce patron est spécialisé pour les types ordinaires du C++ et certains types de la STL.
+Pour les autres types (eg les classes définies par l'utilisateur), il est nécessaire d'ajouter une spécialisation au patron pour le type <code>C</code>.
+La clé de hachage d'un objet de type <code>C</code> s'obtient généralement en combinant par des ou exclusifs (opérateur ^) les codes de hachage calculés sur chacun des principaux attributs de <code>C</code>.
+</p>
+<div id="question">
+Substituez <code>std::map</code> par une table de hachage de type <code>std::unordered_map</code> dans une copie
+<code>HashTableBasedColorMap</code> de la classe <code>TreeBasedColorMap</code>.
+Comparez et analysez ses performances au regard de celles obtenues précédemment.
+</div>
+
+</div>
+
+<div id="section">Utilisation des algorithmes de la STL</div>
+
+<div id="core">
+  <p>
+  La STL fournit des algorithmes génériques en plus des structures de données.
+  La STL propose par exemple un patron d'algorithme de tri rapide
+  <a href="http://en.cppreference.com/w/cpp/algorithm/sort">std::sort</a> :
+<pre class="prettyprint">
+  template &lt;typename RandomIt, typename Compare>
+  void sort(RandomIt first, RandomIt last, Compare comp);
+</pre>
+  La fonction prend en arguments l'intervalle d'itérateurs <code>[first, last[</code> précisant les éléments à trier.
+  Ces itérateurs doivent être à accès aléatoire, c'est-à-dire manipulables comme des pointeurs. Le troisième argument, optionnel,
+  indique la fonction, le foncteur ou la lambda fonction à utiliser pour comparer les éléments.
+  Si cet argument est manquant, sa valeur par défaut vaut <code>std::less&lt;typename RandomIt::value_type></code>.
+  </p>
+  <p>
+Ainsi supposons qu'étant donnée une table de couleur déjà initialisée, on veuille trier ses couleurs par ordre croissant
+d'intensité.
+L'intensité lumineuse d'une couleur RGB sera définie comme la somme des composantes rouge, verte et bleue.
+(NB : les composantes RGB sont définies comme des <code>unsigned char</code> dont la valeur peut varier de 0 à 255.
+On fera donc attention à calculer la somme des composantes sur un type adapté qui ne pause pas de problème de dépassement.).
+La relation d'ordre utilisée pour le tri est donc différente de celle utilisée par <code>std::map</code> et implémentée par l'opérateur <code>operator<</code>.
+Il est donc nécessaire de passer une lamba fonction à <code>std::sort</code> pour réaliser le tri désiré.
+  </p>
+
+<div id="question">
+  Ajoutez une méthode <code>void sort();</code> dans la classe <code>TreeBasedColorMap</code> qui trie les couleurs par ordre croissant d'intensité.
+  Testez en décommentant le contenu de la fonction <code>testQ5</code>.
+</div>
+
+</div>
+
+    </div>      
+  </body>
+</html>
