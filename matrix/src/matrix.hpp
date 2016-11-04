@@ -45,13 +45,22 @@ Matrix<Scalar, dim1,dim2> operator+(const Matrix<Scalar,dim1,dim2>& A, const Mat
  */
 template <typename Scalar, int dim1, int dim2>
 class Matrix{
-  // instantiate 2-D array
+  /**
+   * A scalar array to store each entry matrix in a one dimensional array
+   * It could have been stored in a 2D array, but pointers would have been harder to manage
+   */
   Scalar coefs_[dim1*dim2];
-
+  
+  /**
+   * Operator<< to output the matrix 
+   */
   friend std::ostream& operator<< <Scalar, dim1,dim2>(std::ostream& os, const Matrix<Scalar,dim1,dim2>& M);
+
+  /**
+   * Operator + to compute matrix addition
+   */
   friend Matrix operator+ <Scalar, dim1, dim2>(const Matrix& A, const Matrix& B);
-  // Friend matrix for product
-  //template <typename Scalar3, dim1, int dim3> friend Matrix;
+
   
 public:
   /**
@@ -74,6 +83,8 @@ public:
   
   /**
    * Compose has to access Matrix members
+   * Compose is the class that implements the matrix product
+   * This is needed because two matrix of different sizes belong to two different classes
    */
   template <typename Scalar2, int dim12, int dim22, int dim13> friend class Compose;
   
@@ -86,11 +97,14 @@ public:
 };
 
 /**
- * Class compose used to compute matrix product
+ * Class used to compute a matrix product 
  */
 template<typename Scalar, int dim1, int dim2, int dim3>
 class Compose{
   public:
+    /**
+     * Multiply two matrices 
+     */
     static Matrix<Scalar, dim1, dim3> multiply(const Matrix<Scalar, dim1, dim2>& A, const Matrix<Scalar, dim2, dim3>& B){
       Matrix<Scalar, dim1, dim3> C;
       Scalar *pr = C.coefs_;
