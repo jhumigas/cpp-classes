@@ -1,7 +1,7 @@
 include_directories (${CMAKE_SOURCE_DIR}/src)
 
 file(GLOB 
-  matrix_tests
+  petri_examples
   example-*.cpp)
 
 foreach(filename ${petri_examples})
