@@ -54,5 +54,9 @@ int main(int argc, char* argv[]) {
 
   for(int steps = 0; steps < 100 && redlights(); ++steps);
 
+  std::ofstream file;
+  file.open("redlights.dot");
+  file << redlights;
+  file.close();
   return 0;
 }

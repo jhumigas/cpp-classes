@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
 #include <petriPool.hpp>
 #include <petriTransition.hpp>
 
@@ -57,6 +58,12 @@ namespace petri {
     void linkOut(tranIdf      transition,
 		 poolIdf      pool,
 		 unsigned int nb_tokens_out);
+
+    /**
+     *
+     *
+     */
+     //std::ofstream& operator<<(std::ofstream& of);
   };
     
 }

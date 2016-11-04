@@ -47,4 +47,34 @@ void petri::Network::linkOut(tranIdf      transition,
 	std::cout << transitions[transition].name << " - Added output pool " << pool << " with with required output tokens " << nb_tokens_out << std::endl;
 }
 
+// std::ofstream& petri::Network::operator<<(std::ofstream& of){
+//   of << "digraph Petri {\n overlap=scale \n";
+//   int i = 0;
+//   for(auto& transition : transitions){
+//     of << "transition"<< i << " [label=\"" << transition.name << "\", shape=box, color=red, style=bold]; \n";
+//     ++i;
+//   }
+//   int j = 0;
+//   for(auto& pool : pools){
+//     of << "pool"<< j << " [label=\"" << pool.name << "\", color=blue, style=bold]; \n";
+//     ++j;
+//   }
+
+//   of << "\n/* edges */";
+  
+//   int k = 0;
+//   for(auto& transition : transitions){
+//     for(auto& in : transition.input){
+//       of << "pool" << in.first << " -> transition" << k <<" [label=\"" << in.second << "\"];";
+//     }
+//     for(auto& out : transition.output){
+//       of << "transition" << k  << " -> pool" << out.first<<" [label=\"" << out.second << "\"];";
+//     }
+
+//     ++k;
+//   }
+  
+
+//   of << "\n}";
+// }
     
