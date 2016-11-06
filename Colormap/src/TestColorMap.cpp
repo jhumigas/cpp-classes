@@ -114,7 +114,7 @@ void testQ1(int n) {
 
 void testQ2(int n) {
 	std::cout << std::endl << "Test de la table de couleur avec vecteur" << std::endl << std::endl;
-	test1<VectorBasedColorMap>(VectorBasedColorMap(), n);
+	test1<VectorBasedColorMap>(VectorBasedColorMap(n), n);
 }
 
 void testQ3(int n) {

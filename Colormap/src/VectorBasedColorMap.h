@@ -21,7 +21,7 @@ namespace colormap {
             const color_type& color(void) { return color_;}
         };
 
-        VectorBasedColorMap(void);
+        VectorBasedColorMap(int i);
         void clear(void);
         void add(const color_type& color);
 

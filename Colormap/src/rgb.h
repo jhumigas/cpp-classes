@@ -8,7 +8,10 @@ namespace colormap {
 
 		// Composantes RGB
 		scalar_type red_, green_, blue_;
+        
+		// Constructeur par defaut, utilisé pour initialiser une liste vide
 
+		rgb();
 		// Constructeur à partir des 3 composantes
 		rgb(scalar_type red, scalar_type green, scalar_type blue);
 

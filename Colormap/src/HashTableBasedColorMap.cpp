@@ -1,8 +1,8 @@
 
-// Nécessaire pour importer la fonction assert().
+// NÃ©cessaire pour importer la fonction assert().
 #include <assert.h>
 
-// On a besoin des déclarations de ColorMap pour définir ses méthodes
+// On a besoin des dÃ©clarations de ColorMap pour dÃ©finir ses mÃ©thodes
 #include "HashTableBasedColorMap.h"
 
 namespace colormap {

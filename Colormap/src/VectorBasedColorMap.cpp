@@ -7,9 +7,7 @@
 
 namespace colormap {
 
-    VectorBasedColorMap::VectorBasedColorMap(void){
-
-    }
+    VectorBasedColorMap::VectorBasedColorMap(int n) : colors_(std::vector<color_type>(n)){}
 
     void VectorBasedColorMap::clear(void){
         colors_.clear();
