@@ -76,6 +76,45 @@ void test1(const _ColorMap& arg, int n) {
 }
 
 template<typename _ColorMap>
+void test1bis(const _ColorMap& arg, int n) {
+	Timer timer;
+
+	{
+		_ColorMap cm(arg);
+		std::cout << std::endl << "Remplissage de la table ... " << std::flush;
+		timer.start();
+		for(int i = 0; i != n; ++i) {
+			cm.place(i, rgb((i >> 16) & 0xFF, (i >> 8) & 0xFF, i & 0xFF));
+		}
+		timer.stop();
+
+		std::cout << "Recherche par index ... " << std::flush;
+		timer.start();
+		for(int i = 0; i != n; ++i) {
+			const rgb& c = cm(i);
+			if(!(c == rgb((i >> 16) & 0xFF, (i >> 8) & 0xFF, i & 0xFF))) {
+				throw std::runtime_error("Index manquant");
+			}
+		}
+		timer.stop();
+
+		std::cout << "Recherche par couleur ... " << std::flush;
+		timer.start();
+		for(int i = 0; i != n; ++i) {
+			int c = cm(rgb((i >> 16) & 0xFF, (i >> 8) & 0xFF, i & 0xFF));
+			if(c != i) {
+				throw std::runtime_error("Couleur manquante");
+			}
+		}
+		timer.stop();
+
+		std::cout << "Destruction ... " << std::flush;
+		timer.start();
+	}
+	timer.stop();
+}
+
+template<typename _ColorMap>
 void test2(const _ColorMap& arg, int n) {
 	Timer timer;
 
@@ -114,7 +153,9 @@ void testQ1(int n) {
 
 void testQ2(int n) {
 		std::cout << std::endl << "Test de la table de couleur avec vecteur" << std::endl << std::endl;
-		test1<VectorBasedColorMap>(VectorBasedColorMap(n), n);
+		//test1<VectorBasedColorMap>(VectorBasedColorMap(n), n);
+		// With reserve and using operator[] when filling the color table
+		test1bis<VectorBasedColorMap>(VectorBasedColorMap(n), n); 
 }
 
 void testQ3(int n) {

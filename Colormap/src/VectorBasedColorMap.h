@@ -24,6 +24,7 @@ namespace colormap {
         VectorBasedColorMap(int i);
         void clear(void);
         void add(const color_type& color);
+        void place(int i,const color_type& color);
 
         index_type operator()(const color_type& color) const;
 

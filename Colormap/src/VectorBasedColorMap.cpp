@@ -7,13 +7,20 @@
 
 namespace colormap {
 
-    VectorBasedColorMap::VectorBasedColorMap(int n) : colors_(std::vector<color_type>(n)){}
+    VectorBasedColorMap::VectorBasedColorMap(int n) {
+        colors_ = std::vector<VectorBasedColorMap::color_type>();
+        // Used to eliminate reallocations if the number of elements is known beforehand
+        colors_.reserve(n);
+    }
 
     void VectorBasedColorMap::clear(void){
         colors_.clear();
     }
     void VectorBasedColorMap::add(const VectorBasedColorMap::color_type& color){
         colors_.push_back(color);
+    }
+    void VectorBasedColorMap::place(int i, const VectorBasedColorMap::color_type& color){
+        colors_[i] = color;
     }
 
     VectorBasedColorMap::index_type VectorBasedColorMap::operator()(const VectorBasedColorMap::color_type& color) const{
