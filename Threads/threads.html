@@ -1,0 +1,179 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Stage SM14, Supélec</title>
+    <link href="../../design/sm14.css" type="text/css" rel="stylesheet"/>
+    <script src="../../design/prettify/src/run_prettify.js?lang=cpp"></script>
+  </head>
+  
+  <body>
+    <div id="content">
+      
+      <div id="banner">
+      </div>
+      <div id="title">Programmation système et synthèse</div>
+
+      <div id="core">
+        Le TP se décompose en une série d'exercices courts et un problème plus conséquent.
+        <ul>
+          <li><a href="#exercices-future">Exercices sur les threads et les futures</a></li>
+          <li><a href="#probleme-threadpool">Problème : conception d'un réservoir de threads</a></li>
+        </ul>
+      </div>
+
+      <div id="title"><a name="exercices-future">Exercices sur les threads et les futures</a></div>
+      
+      <div id="core">
+        Le but de cette première partie est d'aquérir les bases de la programmation multi-thread et de la programmation réactive (future) en C++11.
+        Les exercices présentent une progression : chaque exercice est destiné à illustrer l'utilité de nouveaux objets ou fonctions (comme <code>std::future</code>, <code>std::promise</code>, <code>std::shared_future</code>, <code>std::atomic</code>, <code>std::async</code>, etc).
+        <br><br>
+        Dans la suite on considère un ensemble de calculs à réaliser. Certains de ces calculs, dits "atomiques", peuvent s'exécuter en parallèle ; d'autres sont dépendants, en particulier lorsque le résultat d'un calcul A sert d'argument à un calcul B. Ces relations peuvent être résumées par un graphe de dépendance comme illustré sur la figure suivante.
+        <br><br>
+        <center><img src="images/exo1.png" width="300px"></center>
+        <br>
+        Les exercices qui suivent (à l'exception du dernier) proposent chacun un graphe de dépendance. 
+        A vous de concevoir une implémentation multithread qui réalise l'ensemble des calculs atomiques de chacun de ces graphes en un <b>temps minimal</b>.
+        <br>
+        A des fins de simplification, les calculs atomiques seront simulés : ils consisteront
+        à produire une <code>std::string</code> contenant le nom du calcul et les valeurs des arguments reçus, eux mêmes supposés être
+        des <code>const std::string &</code>. 
+        La durée du calcul sera simulée en introduisant un délai d'attente dont la valeur est donnée dans le graphe de dépendance.
+        Ainsi le calcul <code>C</code> du graphe précédent pourra être représenté par la fonction :
+        <pre class="prettyprint">
+// a et b contiennent les valeurs de retour des calculs A et B.
+std::string C(const std::string& a, const std::string& b) {
+  std::this_thread::sleep_for(100ms);
+  return "C(" + a + "," + b + ")"; 
+}</pre>
+
+        <b>Remarques :</b>
+        <ul>
+          <li>Votre solution doit fournir l'exécution optimale quels que soient les temps d'exécution que prennent les calculs élémentaires.
+        Les valeurs des temps d'exécution figurant sur les graphes de dépendance sont spécifiés uniquement afin de travailler sur une base commune.</li>
+          <li>On veillera à toujours utiliser le nombre minimum de threads requis pour atteindre le temps de calcul minimal.</li>
+          <li>On veillera notamment à ce que tous les threads soient en charge d'un calcul (i.e pas de thread superviseur, en attente sur les threads de calcul).</li>
+          <li>Compte tenu des remarques précédentes, on pourra supposer que le thread principal prendra toujours en charge la branche du graphe de dépendance la plus à gauche.</li>
+        </ul>
+        
+        Récupérez le fichier archive  <a href="../Threads.zip">Threads.zip</a> et générez un environnement de compilation adapté à l'aide de CMake :
+
+        <pre class="prettyprint">
+unzip Threads.zip ; cd Threads
+mkdir build ; cd build
+cmake -G"Unix Makefiles" ../src # Pour g++ sous Linux
+cmake -G"Eclipse CDT4 - Unix Makefiles" ../src # Pour Eclipse CDT / g++
+cmake -G"Visual Studio XX"../src # Pour Visual Studio XX sous Windows (avec XX = numéro de version. Ex XX = 12 pour Visual Studio 13...)
+make  # Compilation (dans le cas de g++).
+./threads 1  # Lance le binaire compilé en passant en arguments le numéro de l'exercice à tester</pre>
+      </div>
+
+      <div id="section">Question préliminaire (optionnelle)</div>
+
+      <div id="core">
+        Le codage des différentes fonctions réalisant les calculs atomiques est une tâche répétitive.
+        On aimerait pouvoir simplement écrire :
+        <pre class="prettyprint">
+auto A = make_calcul_unaire("A", 1s);
+auto B = make_calcul_unaire("B", 100ms);
+auto C = make_calcul_binaire("C", 10us);
+...</pre>
+      </div>
+      <div id="question">Codez dans le fichier <code>Threads.cpp</code> les fonctions <code>make_calcul_unaire</code> et <code>make_calcul_binaire</code>
+        qu'on testera à la question suivante.</div>
+      <div id="core">
+
+      </div>
+
+      <div id="section">Calcul parallèle "simple"</div>
+      <div id="question">Implémentez le calcul exprimé par le graphe de dépendance précédent en complétant la fonction de test <code>exo1</code> du fichier <code>Threads.cpp</code>.</div>
+      <div id="core">
+        On vérifiera qu'on obtient bien le temps d'exécution minimal ainsi que le bon résultat "C(A(e),B(e))". On procédera de même dans les exercices suivants.</div>
+      <div id="core">
+      </div>
+
+      <div id="section">Calculs parallèles "entrelacés"</div>
+      <div id="core">
+        On considère le graphe de dépendance suivant, dans lequel les calculs C et D ont tous deux besoin des résultats des calculs A et B.
+        <center><img src="images/exo2.png" width="340px"></center>
+      </div>
+      <div id="question">Codez votre solution, cette fois-ci en complétant la fonction <code>exo2</code>.</div>
+
+      <div id="section">Calculs parallèles "concurrents"</div>
+      <div id="core">
+        On considère le graphe de dépendance suivant, dans lequel le calcul C peut s'exécuter dès que l'un des deux calculs A OU B produit un résultat, sans avoir à attendre le résultat du second calcul. Un tel cas de figure se produit par exemple dans les problèmes de recherche parallélisables (comme la recherche d'un élément dans un tableau) où le résultat est déterminé dès que l'élément cherché est trouvé par un des threads.
+        <center><img src="images/exo3.png" width="300px"></center>
+      </div>
+      <div id="question">Codez votre solution, cette fois-ci en complétant la fonction <code>exo3</code>.</div>
+
+      <div id="section">Amélioration du problème précédent</div>
+
+      <div id="core">
+        Que se passe-t-il si l'on passe la durée d'exécution du calcul B de 200 ms à 300ms ? Est-ce encore optimal ?
+        Pour retrouver l'optimalité, il est nécessaire d'interrompre les threads encore actifs (en l'occurence celui en charge du calcul de B) dès qu'un thread trouve le résultat (en l'occurence celui en charge de A).
+        Pour ce faire, on peut utiliser une variable booléenne partagée entre threads qui devient vrai dès qu'un thread a trouvé le résultat et que les autres threads peuvent abandonner leur recherche.
+      </div>
+      <div id="question">Codez une telle solution, cette fois-ci en complétant la fonction <code>exo4</code>. Vérifiez qu'on retrouve bien l'optimalité.</div>
+      <div id="core">
+        On pourra supposer que les calculs A et B vérifient à chaque milliseconde écoulée s'il faut s'interrompre à l'aide d'une fonction <code>make_calcul_unaire_avec_scrutation</code>?
+      </div>
+
+      <div id="section">Problème réel (exercice optionnel)</div>
+
+      <div id="core">
+        Dans les exercices qui précèdent les calculs fictifs étaient supposés parfaitement parallélisables : l'exécution d'un thread de calcul ne présentait aucun effet de bord influançant l'exécution des autres threads. Cette hypothèse est malheureusement souvent fausse, essentiellement du fait de la limitation de la taille de mémoire cache de chaque coeur et des lenteurs occasionnées par les accès partagés à la mémoire vive.
+        <br><br>
+        A des fins d'illustration, on cherche à résoudre le problème de la recherche d'un élément dans un intervalle donné <code>[begin,end[</code> d'itérateurs en utilisant tous les coeurs disponibles. L'idée consiste à diviser l'intervalle de recherche en des segments de même longueur dont le nombre vaut le nombre de coeurs disponibles. La recherche dans chaque segment est alors confiée à un thread distinct.
+      </div>
+      <div id="question">En s'inspirant de la solution de l'exercice précédent, complétez le patron de fonction <code>find_multicore</code> qui implémente l'idée précédente et qui s'utilise de la même façon que le patron de fonction <code>std::find(begin, end)</code> de la STL.</div>
+      <div id="core">
+        Testez à l'aide de la fonction <code>exo5</code>.
+        Observez l'influence de la taille <code>n</code> de l'intervalle sur les performances de la version multi coeurs comparativement à la version mono coeur.
+      </div>
+
+      <br>
+
+      <div id="title"><a name="probleme-threadpool">Problème : conception d'un réservoir de threads</a></div>
+
+      <div id="core">
+      Ce problème porte sur la synchronisation des threads C++11 (mutex et variables de condition) et sur la difficulté de bien gérer les problèmes de race condition, deadlock, etc. Le but du problème est de concevoir un réservoir de thread.
+      <br><br>
+      Lorsque un calcul parallélisable est court, le temps fixe (overhead) lié à la création et la destruction du thread (et de ses ressources) n'est plus négligeable.
+      Une parade consiste à recourir à un <b>réservoir de threads</b> ou <a href="http://en.wikipedia.org/wiki/Thread_pool_pattern">thread pool</a> en anglais.
+      A sa création, le réservoir est "rempli" d'un certain nombre de threads qui sont maintenus en attente. Lorsqu'un calcul est confié au réservoir, un thread disponible est réveillé et affecté au calcul avant de se rendormir une fois le calcul terminé.
+      Pour gérer le cas où tous les threads sont occupés, le réservoir dispose par ailleurs d'une file stockant les calculs en attente de leur exécution.
+      Les threads du réservoir sont donc maintenus en vie tant que le réservoir n'est pas lui même détruit.
+      </div>
+      <div id="section">Conception du réservoir</div>
+      <div id="core">
+        On aimerait pouvoir programmer le réservoir de thread de la façon suivante :
+      <pre class="prettyprint">
+void A() { // Fait un calcul de 100ms ... }
+void B() { // Fait un calcul de 200ms ... }
+void C() { // Fait un calcul de 100ms ... }
+
+{
+  ThreadPool pool{2}; // Création d'un réservoir de deux threads
+  pool(A); // Exécute A dans le thread 1 du pool
+  pool(B); // Exécute B dans le thread 2 du pool
+  pool(C); // Exécute C dans le thread 2 du pool, après 100ms
+}
+// Le réservoir est détruit ici uniquement quand il n'y a plus de tâches à exécuter
+      </div>
+
+      <div id="question">Complétez la classe <code>ThreadPool></code> dans les fichiers <code>ThreadPool.hpp</code> et <code>ThreadPool.cpp</code> afin de se conformer à l'exemple précédent. Testez à l'aide de la fonction <code>prob1/<code>.</div>
+
+      <div id="section">Test de performance</div>
+
+      <div id="core">
+        On veut comparer les performances d'un réservoir de threads par rapport à l'instantiation "classique" de threads à l'aide de la fonction <code>prob2</code>.
+        Pour cela on a besoin d'une méthode <code>join</code> qui met en attente le thread appelant tant que le réservoir a une tâche à traîter ou en cours de traitement, à l'image de l'exemple suivant.
+      <pre class="prettyprint">
+ThreadPool pool{2}; // Création d'un réservoir de deux threads
+pool(A)(B)(C); // Exécute A, B et C
+pool.join(); // Bloque tant que A, B et C ne sont pas terminées
+      </div>
+      <div id="question">Complétez la méthode <code>join</code> de la classe <code>ThreadPool></code> puis évaluez les performances du réservoir de threads.</div>
+
+    </div>      
+  </body>
+</html>
