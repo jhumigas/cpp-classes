@@ -1,4 +1,4 @@
-﻿
+﻿#include <iostream>
 // Nécessaire pour importer la fonction assert().
 #include <assert.h>
 
@@ -20,7 +20,8 @@ namespace colormap {
         colors_.push_back(color);
     }
     void VectorBasedColorMap::place(int i, const VectorBasedColorMap::color_type& color){
-        colors_[i] = color;
+        //colors_[i] = color;
+        colors_.push_back(color);
     }
 
     VectorBasedColorMap::index_type VectorBasedColorMap::operator()(const VectorBasedColorMap::color_type& color) const{

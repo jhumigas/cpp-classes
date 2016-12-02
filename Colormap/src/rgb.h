@@ -18,5 +18,8 @@ namespace colormap {
 		// Opérateur de comparaison (égalité)
 		bool operator==(const rgb& other) const; 
 
+		// Opérateur de comparaison (ordre)
+		bool operator<(const rgb& other) const;
+
 	};
 };

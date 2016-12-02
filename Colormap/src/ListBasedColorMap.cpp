@@ -31,12 +31,20 @@ namespace colormap {
 	}
 
 	const ListBasedColorMap::color_type& ListBasedColorMap::operator()(ListBasedColorMap::index_type index) const {
-        ListBasedColorMap::index_type i = 0;
-		for(std::list<ListBasedColorMap::color_type>::const_iterator it = this->colors_.begin(); it != this->colors_.end(); ++it, ++i){
-            if(i == index){
-				return *it;
-			}
+        //ListBasedColorMap::index_type i = 0;
+		auto it = this->colors_.begin();
+		try{
+			std::advance(it, index);
+		}catch(std::exception& e){
+			throw std::runtime_error("Index out of bounds.");
 		}
-		throw std::runtime_error("Index out of bounds.");
+
+		return *it;
+		// for(std::list<ListBasedColorMap::color_type>::const_iterator it = this->colors_.begin(); it != this->colors_.end(); ++it, ++i){
+        //     if(i == index){
+		// 		return *it;
+		// 	}
+		// }
+		// throw std::runtime_error("Index out of bounds.");
 	}
 };
